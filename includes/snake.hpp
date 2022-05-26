@@ -8,6 +8,11 @@
 #ifndef SNAKE_HPP_
 #define SNAKE_HPP_
 
+class blocks {
+  public:
+    int id;
+}
+
 class snake {
     public:
     protected:

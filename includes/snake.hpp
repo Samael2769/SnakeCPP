@@ -11,6 +11,7 @@
 class blocks {
   public:
     int id;
+    int type;
 }
 
 class snake {

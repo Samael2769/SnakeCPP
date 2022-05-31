@@ -13,8 +13,10 @@ LIB_DIR	=	lib/sm_libc/
 
 SRC_FILES	=\
 
-SRC_FILES_MAIN	=	snake.cpp\
-					\
+SRC_FILES_MAIN	=	Snake.cpp\
+					Core.cpp\
+					Game.cpp\
+					Blocks.cpp\
 
 TEST_FILES	=\
 
@@ -30,15 +32,17 @@ NAME	=	snake
 
 ##############################################################
 
-CFLAGS	=	-W -Wall -Wextra
+CXXLAGS	=	-W -Wall -Wextra
 
 CPPFLAGS	=	-I./includes
 
 TEST_LIB	=	--coverage -lcriterion -lgcov
 
+LDFLAGS		=	-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+
 ##############################################################
 
-CC	=	g++
+CXX	=	g++
 
 PRNT	=	echo
 
@@ -53,7 +57,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(OBJ_MAIN)
 	@$(PRNT) -e "\e[0;31m Compiling ${NAME}... \e[0m"
-	$(CC) -o $(NAME) $(OBJ) $(OBJ_MAIN)
+	$(CXX) -o $(NAME) $(OBJ) $(OBJ_MAIN) $(LDFLAGS)
 
 make_lib:
 	@$(PRNT) -e "\e[0;31m Making lib $(LIB_DIR)... \e[0m"

@@ -17,11 +17,12 @@ static void init_texture(std::pair<sf::Texture, sf::Sprite> &texture, std::strin
 
 Core::Core()
 {
-    this->window.create(sf::VideoMode(1920, 1080), "Snake");
+    this->window.create(sf::VideoMode(800, 600), "Snake");
     this->window.setFramerateLimit(60);
     this->event = sf::Event();
     images["background"] = std::make_pair(sf::Texture(), sf::Sprite());
-    init_texture(images["background"], "asset/Background.png", 0, 0, 1920, 1080);
+    init_texture(images["background"], "asset/Background.png", 0, 0, 800, 600);
+    //snake = Snake();
 }
 
 Core::~Core()
@@ -41,6 +42,7 @@ void Core::run()
     while (this->window.isOpen()) {
         this->window.clear();
         this->window.draw(this->images["background"].second);
+        //this->snake.print(this->window);
         this->HandleEvent();
         this->window.display();
     }

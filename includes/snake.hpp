@@ -8,16 +8,20 @@
 #ifndef SNAKE_HPP_
 #define SNAKE_HPP_
 
-class blocks {
-  public:
-    int id;
-    int type;
-}
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 
-class snake {
+class Snake {
     public:
+      Snake();
+      ~Snake();
+      void print(sf::RenderWindow &window);
     protected:
     private:
+      sf::CircleShape _head;
+      std::vector<sf::RectangleShape> _body;
 };
 
 #endif /* !SNAKE_HPP_ */

@@ -6,24 +6,61 @@
 */
 
 #include "Snake.hpp"
+#include <iostream>
 
 Snake::Snake()
 {
-    _head = sf::CircleShape(5);
+    _head = sf::CircleShape(15);
     _head.setFillColor(sf::Color::Red);
-    _head.setPosition(sf::Vector2f(450, 300));
+    _head.setPosition(sf::Vector2f(400, 300));
 
     for (int i = 0; i < 3; ++i) {
         sf::RectangleShape body;
-        body.setSize(sf::Vector2f(5, 5));
+        int pad = 1 * 40;
+        if (i == 0)
+            pad = 1 * 40;
+        else
+            pad = (i + 1) * 20;
+        body.setSize(sf::Vector2f(20, 20));
         body.setFillColor(sf::Color::Red);
-        body.setPosition(sf::Vector2f(450, 300 + i * 5));
+        body.setPosition(sf::Vector2f(400 + 10, 300 + pad));
         _body.push_back(body);
     }
 }
 
 Snake::~Snake()
 {
+}
+
+void Snake::update()
+{
+    sf::Vector2f Hpos = _head.getPosition();
+    sf::Vector2f newpos;
+    _head.move(sf::Vector2f(_directionx, _directiony));
+    if (_head.getPosition().x > 800)
+        _head.setPosition(sf::Vector2f(0, _head.getPosition().y));
+    if (_head.getPosition().x < 0)
+        _head.setPosition(sf::Vector2f(800, _head.getPosition().y));
+    if (_head.getPosition().y > 600)
+        _head.setPosition(sf::Vector2f(_head.getPosition().x, 0));
+    if (_head.getPosition().y < 0)
+        _head.setPosition(sf::Vector2f(_head.getPosition().x, 600));
+    for (int i = 0; i < _body.size(); ++i) {
+        sf::Vector2f Bpos = _body[i].getPosition();
+        if (i == 0)
+            _body[i].setPosition(sf::Vector2f(Hpos.x + 5, Hpos.y + 5));
+        else
+            _body[i].setPosition(sf::Vector2f(newpos.x, newpos.y));
+        newpos = Bpos;
+        if (_body[i].getPosition().x >= 800)
+            _body[i].setPosition(sf::Vector2f(0, Bpos.y));
+        if (_body[i].getPosition().x <= 0)
+            _body[i].setPosition(sf::Vector2f(800, Bpos.y));
+        if (_body[i].getPosition().y >= 600)
+            _body[i].setPosition(sf::Vector2f(Bpos.x, 0));
+        if (_body[i].getPosition().y <= 0)
+            _body[i].setPosition(sf::Vector2f(Bpos.x, 600));
+    }
 }
 
 void Snake::print(sf::RenderWindow &window)

@@ -18,10 +18,14 @@ class Snake {
       Snake();
       ~Snake();
       void print(sf::RenderWindow &window);
+      void update();
+      void setDirection(float x, float y) {_directionx = x; _directiony = y;}
     protected:
     private:
       sf::CircleShape _head;
       std::vector<sf::RectangleShape> _body;
+      float _directionx = 10;
+      float _directiony = 0;
 };
 
 #endif /* !SNAKE_HPP_ */

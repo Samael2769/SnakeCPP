@@ -22,7 +22,6 @@ Core::Core()
     this->event = sf::Event();
     images["background"] = std::make_pair(sf::Texture(), sf::Sprite());
     init_texture(images["background"], "asset/Background.png", 0, 0, 800, 600);
-    //snake = Snake();
 }
 
 Core::~Core()
@@ -42,7 +41,16 @@ void Core::run()
     while (this->window.isOpen()) {
         this->window.clear();
         this->window.draw(this->images["background"].second);
-        //this->snake.print(this->window);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            this->snake.setDirection(-10, 0);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            this->snake.setDirection(10, 0);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+            this->snake.setDirection(0, -10);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+            this->snake.setDirection(0, 10);
+        this->snake.update();
+        this->snake.print(this->window);
         this->HandleEvent();
         this->window.display();
     }

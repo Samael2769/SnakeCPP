@@ -22,6 +22,10 @@ Core::Core()
     this->event = sf::Event();
     images["background"] = std::make_pair(sf::Texture(), sf::Sprite());
     init_texture(images["background"], "asset/Background.png", 0, 0, 800, 600);
+    font = sf::Font();
+    font.loadFromFile("asset/ASMAN.ttf");
+    text = sf::Text("Score: 0", font, 30);
+    text.setPosition(10, 10);
 }
 
 Core::~Core()
@@ -36,22 +40,36 @@ void Core::HandleEvent()
     }
 }
 
+void Core::updateScore()
+{
+    int score = this->snake.getSize() - 3;
+    this->text.setString("Score: " + std::to_string(score));
+}
+
 void Core::run()
 {
     while (this->window.isOpen()) {
         this->window.clear();
         this->window.draw(this->images["background"].second);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && this->snake.getDirectionx() != 10)
             this->snake.setDirection(-10, 0);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && this->snake.getDirectionx() != -10)
             this->snake.setDirection(10, 0);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && this->snake.getDirectiony() != 10)
             this->snake.setDirection(0, -10);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && this->snake.getDirectiony() != -10)
             this->snake.setDirection(0, 10);
-        this->snake.update();
+        updateScore();
+        try {
+            this->snake.update();
+        } catch (std::exception &e) {
+            std::cout << "Game over" << std::endl;
+            std::cout << "Score = " << text.getString().toAnsiString().substr(7) << std::endl;
+            this->window.close();
+        }
         this->snake.print(this->window);
         this->HandleEvent();
+        window.draw(text);
         this->window.display();
     }
 }

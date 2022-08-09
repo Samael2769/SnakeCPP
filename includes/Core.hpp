@@ -19,10 +19,13 @@ class Core {
         ~Core();
         void run();
         void HandleEvent();
+        void updateScore();
         Snake snake;
         sf::RenderWindow window;
         sf::Event event;
         std::map<std::string, std::pair<sf::Texture, sf::Sprite>> images;
+        sf::Text text;
+        sf::Font font;
     protected:
     private:
 };

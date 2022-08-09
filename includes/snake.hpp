@@ -20,10 +20,15 @@ class Snake {
       void print(sf::RenderWindow &window);
       void update();
       void setDirection(float x, float y) {_directionx = x; _directiony = y;}
+      void randomFoodPos();
+      int getSize() {return _body.size();}
+      int getDirectionx() {return _directionx;}
+      int getDirectiony() {return _directiony;}
     protected:
     private:
       sf::CircleShape _head;
       std::vector<sf::RectangleShape> _body;
+      sf::CircleShape _food;
       float _directionx = 10;
       float _directiony = 0;
 };

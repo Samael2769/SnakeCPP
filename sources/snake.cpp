@@ -13,6 +13,7 @@ Snake::Snake()
     _head = sf::CircleShape(15);
     _head.setFillColor(sf::Color::Red);
     _head.setPosition(sf::Vector2f(400, 300));
+    _head.setOrigin(sf::Vector2f(_head.getRadius(), _head.getRadius()));
 
     for (int i = 0; i < 3; ++i) {
         sf::RectangleShape body;
@@ -23,13 +24,31 @@ Snake::Snake()
             pad = (i + 1) * 20;
         body.setSize(sf::Vector2f(20, 20));
         body.setFillColor(sf::Color::Red);
-        body.setPosition(sf::Vector2f(400 + 10, 300 + pad));
+        body.setPosition(sf::Vector2f(400, 300 + pad));
+        body.setOrigin(sf::Vector2f(body.getSize().x / 2, body.getSize().y / 2));
         _body.push_back(body);
     }
+    _food = sf::CircleShape(7);
+    _food.setFillColor(sf::Color::Blue);
+    randomFoodPos();
 }
 
 Snake::~Snake()
 {
+}
+
+void Snake::randomFoodPos()
+{
+    int x = rand() % 800;
+    int y = rand() % 600;
+    _food.setPosition(sf::Vector2f(x, y));
+}
+
+static bool Collide(sf::Vector2f vec1, sf::Vector2f vec2)
+{
+    if ((vec1.x > vec2.x - 15 && vec1.x < vec2.x + 15) && (vec1.y > vec2.y - 15 && vec1.y < vec2.y + 15))
+        return true;
+    return false;
 }
 
 void Snake::update()
@@ -48,7 +67,7 @@ void Snake::update()
     for (int i = 0; i < _body.size(); ++i) {
         sf::Vector2f Bpos = _body[i].getPosition();
         if (i == 0)
-            _body[i].setPosition(sf::Vector2f(Hpos.x + 5, Hpos.y + 5));
+            _body[i].setPosition(sf::Vector2f(Hpos.x, Hpos.y));
         else
             _body[i].setPosition(sf::Vector2f(newpos.x, newpos.y));
         newpos = Bpos;
@@ -60,11 +79,24 @@ void Snake::update()
             _body[i].setPosition(sf::Vector2f(Bpos.x, 0));
         if (_body[i].getPosition().y <= 0)
             _body[i].setPosition(sf::Vector2f(Bpos.x, 600));
+        if (_head.getPosition().x == _body[i].getPosition().x && _head.getPosition().y == _body[i].getPosition().y) {
+            throw std::runtime_error("Collision");
+        }
+    }
+    if (Collide(_head.getPosition(), _food.getPosition())) {
+        sf::RectangleShape body;
+        body.setSize(sf::Vector2f(20, 20));
+        body.setFillColor(sf::Color::Red);
+        body.setPosition(sf::Vector2f(newpos.x, newpos.y));
+        body.setOrigin(sf::Vector2f(body.getSize().x / 2, body.getSize().y / 2));
+        _body.push_back(body);
+        randomFoodPos();
     }
 }
 
 void Snake::print(sf::RenderWindow &window)
 {
+    window.draw(_food);
     window.draw(_head);
     for (auto &body : _body)
         window.draw(body);
